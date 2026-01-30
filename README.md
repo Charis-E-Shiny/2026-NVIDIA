@@ -12,7 +12,9 @@ In modern R&D and this challenge, speed matters, but rigor and coordination matt
 
 ## Logistics, Milestones, and Evaluation
 
-In this challenge, you will mimic a real-world R&D pipeline, moving from rapid prototyping to high-performance deployment. You will utilize two distinct platforms, each chosen for a specific phase of your development lifecycle. 
+In this challenge, you will mimic a real-world R&D pipeline, moving from rapid prototyping to high-performance deployment. Success in this challenge requires clear orchestration; review the section ['Assign Your Technical Roles'] (https://github.com/iQuHACK/2026-NVIDIA/blob/main/LABS-challenge-Phase1.md) in the GitHub repository to define your team's PICs for Project Lead, GPU Acceleration, Quality Assurance, and Technical Marketing. These roles ensure your team remains aligned while managing both human and AI-agent workflows.
+
+During challenge, you will utilize two distinct platforms, each chosen for a specific phase of your development lifecycle. 
 
 * **Phase 1 (Prototyping): qBraid** | [Specifications](https://github.com/iQuHACK/2026-NVIDIA/blob/main/LABS-challenge-Phase1.md)
 
