@@ -41,14 +41,11 @@
 * **Relevance:** 
     * Justifies the use of QAOA with low depth circuits
 
-* **Reference:** [Title, Author, Link]
+
 * **Relevance:** [How does this paper support your plan?]
-    * *Example:* "Evidence of scaling advantage for the quantum approximate optimization algorithm on a classically intractable problem Shaydulin et al  Science Advances 2024
+    * * "Evidence of scaling advantage for the quantum approximate optimization algorithm on a classically intractable problem Shaydulin et al  Science Advances 2024
 Quantum Optimization Benchmark Library: The Intractable Decathlon (Kipu Quantum, 2025)"
 
-* **Reference:** [Title, Author, Link]
-* **Relevance:** [How does this paper support your plan?]
-    * *Example:* "Reference: 'QAOA for MaxCut.' Relevance: Although LABS is different from MaxCut, this paper demonstrates how parameter concentration can speed up optimization, which we hope to replicate."
 
 ---
 
