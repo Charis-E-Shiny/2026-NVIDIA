@@ -66,18 +66,16 @@ Owner: Prem Santh CK (GPU Acceleration Lead)
 ---
 
 ## 4. The Verification Plan
-**Owner:** Quality Assurance PIC
+Owner: Prem Santh CK (Quality Assurance Lead)
 
 ### Unit Testing Strategy
-* **Framework:** [e.g., `pytest`, `unittest`]
-* **AI Hallucination Guardrails:** [How do you know the AI code is right?]
-    * *Example:* "We will require AI-generated kernels to pass a 'property test' (Hypothesis library) ensuring outputs are always within theoretical energy bounds before they are integrated."
+* **Framework:** pytest and custom validation_kernels
+* **AI Hallucination Guardrails:** To ensure our QAOA kernels and classical search logic are correct, Prem Santh has implemented a "Physics-First" property test. Every AI-generated kernel must pass a deterministic energy verification—meaning the output must fall within the theoretical energy bounds of the LABS problem—before it is allowed to be integrated into our main GPU pipeline.
 
 ### Core Correctness Checks
-* **Check 1 (Symmetry):** [Describe a specific physics check]
-    * *Example:* "LABS sequence $S$ and its negation $-S$ must have identical energies. We will assert `energy(S) == energy(-S)`."
-* **Check 2 (Ground Truth):**
-    * *Example:* "For $N=3$, the known optimal energy is 1.0. Our test suite will assert that our GPU kernel returns exactly 1.0 for the sequence `[1, 1, -1]`."
+* **Check 1 (Symmetry):**  We verify the fundamental property of the LABS problem where a sequence $S$ and its bit-flipped negation $-S$ must produce identical energy values. Our test suite asserts $Energy(S) == Energy(-S)$ to ensure our energy calculation kernel is mathematically sound.
+* **Check 2 (Ground Truth):** As a specific quantum check, we verify that our basis-change kernels (rx and rz "sandwiches") correctly flip a qubit from $|0\rangle$ to $|1\rangle$. If the kernel results in a state other than $|1\rangle$, it is flagged as a rotation error.
+*  **Check 3 (Ground Truth Benchmarking):** For $N=3$, the known global optimal energy is $1.0$. Our verification suite runs our full hybrid pipeline (QAOA + MTS) for $N=3$ and asserts that the result is exactly $1.0$ before we proceed to larger, unknown sequences.
 
 ---
 
