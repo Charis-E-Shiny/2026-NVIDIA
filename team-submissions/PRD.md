@@ -28,13 +28,12 @@
 **Owner:** Project Lead
 
 ### Choice of Quantum Algorithm
-* **Algorithm:** QAOA (p=1-2)
-    
+* **Algorithm:** QAOA
 * **Motivation:** 
-    * We selected QAOA because it was designed for combinatory optimizations, with a lower p (depth), we can have a very short and stable circuit. It's ideal as generator of bitstrings.
-    *  LABS can be expreseed as sum of terms Z_i and Z_j and terms of mayor locality (like G4), QAOA applies an operator with same locality as objective, that's coincidence permits QAOA resolve the case
-    * *Better time to seed, lower time to optimization*: This process uses lower optimization cost, selecting a quantum seeder sample, with a shor depth, the process to get the best bitstring becomes easy
-    * Works well with noisy computers
+    * LABS is a discrete binary problem (each spin is either $+1$ or $-1$). QAOA's "Mixer" and "Cost" layers are mathematically designed to hop between these discrete binary strings more efficiently than a generic VQE circuit.VQE explores the continuous Hilbert space, which is great for finding molecular energies (where electrons can be anywhere). 
+    *  QAOA only has two parameters ($\gamma$ and $\beta$) per layer, regardless of how many qubits you have. This makes the classical optimization step much faster—a huge advantage when you have limited time.VQE often requires many more parameters ($\theta_i$) for each gate.
+    * To use CD, you have to calculate an "Adiabatic Gauge Potential." For a problem as complex as LABS (which has long-range interactions), this is a mathematical nightmare. If you get the math wrong, your algorithm will perform worse than random guessing.
+    *While CD reduces the number of layers ($p$) you need, it often adds a third parameter ($\alpha$) per layer.
    
 
 ### Literature Review
@@ -55,12 +54,14 @@
 ## 3. The Acceleration Strategy
 Owner: Prem Santh CK (GPU Acceleration Lead)
 
-### Quantum Acceleration (CUDA-Q)Strategy : We aren't just running code; we’re optimizing for the hardware. Prem Santh is leading the transition from CPU-bound logic to the CUDA-Q nvidia backend. During our initial phase, we successfully debugged our custom QAOA kernels and passed a rigorous Pi-Rotation Consistency Test to ensure our basis-changes were physically accurate. As we scale to larger $N$, we will utilize FP32 precision to keep our state-vectors lean. If we hit memory limits, we will deploy the nvidia-mgpu backend to distribute the circuit workload across multiple GPUs, ensuring our "Quantum Seeder" stays fast and reliable.
+### Quantum Acceleration (CUDA-Q)Strategy 
+* **Strategy:** We aren't just running code; we’re optimizing for the hardware. During our initial phase, we successfully debugged our custom QAOA kernels and passed a rigorous Pi-Rotation Consistency Test to ensure our basis-changes were physically accurate. As we scale to larger $N$, we will utilize FP32 precision to keep our state-vectors lean. If we hit memory limits, we will deploy the nvidia-mgpu backend to distribute the circuit workload across multiple GPUs, ensuring our "Quantum Seeder" stays fast and reliable.
 
 ### Classical Acceleration (MTS)
-### Strategy: We identified that calculating energy for every bit-flip one-by-one was our primary bottleneck. To overcome this, Prem Santh is overseeing the vectorization of our autocorrelation math using CuPy. Instead of a slow serial approach, we are building a "parallel highway" to evaluate entire batches of sequence neighbors simultaneously on the GPU. This transforms our Memetic Tabu Search from a slow crawl into a high-speed refinement engine that can "polish" quantum seeds in milliseconds.
+* **Strategy:** We identified that calculating energy for every bit-flip one-by-one was our primary bottleneck. To overcome this, we are overseeing the vectorization of our autocorrelation math using CuPy. Instead of a slow serial approach, we are building a "parallel highway" to evaluate entire batches of sequence neighbors simultaneously on the GPU. This transforms our Memetic Tabu Search from a slow crawl into a high-speed refinement engine that can "polish" quantum seeds in milliseconds.
 
-### Hardware TargetsDev Environment: Qbraid (CPU) was used to build our core logic, while the Brev L4 served as our proving ground to ensure our kernels were "hardware-ready" by passing all internal symmetry and rotation validation tests.Production Environment: For the final push to $N=40$ and beyond, we are targeting the Brev A100 (80GB) to leverage its massive memory bandwidth for deep Trotterized QAOA circuits and high-throughput classical refinement.
+### Hardware Targets
+* **Strategy:** Qbraid (CPU) was used to build our core logic, while the Brev L4 served as our proving ground to ensure our kernels were "hardware-ready" by passing all internal symmetry and rotation validation tests. Production Environment: For the final push to $N=40$ and beyond, we are targeting the Brev A100 (80GB) to leverage its massive memory bandwidth for deep Trotterized QAOA circuits and high-throughput classical refinement.
 
 ---
 
