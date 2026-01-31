@@ -53,20 +53,14 @@
 ---
 
 ## 3. The Acceleration Strategy
-**Owner:** GPU Acceleration PIC
+Owner: Prem Santh CK (GPU Acceleration Lead)
 
-### Quantum Acceleration (CUDA-Q)
-* **Strategy:** [How will you use the GPU for the quantum part?]
-    * *Example:* "After testing with a single L4, we will target the `nvidia-mgpu` backend to distribute the circuit simulation across multiple L4s for large $N$."
- 
+### Quantum Acceleration (CUDA-Q)Strategy: We aren't just running code; we’re optimizing for the hardware. Prem Santh is leading the transition from CPU-bound logic to the CUDA-Q nvidia backend. During our initial phase, we successfully debugged our custom QAOA kernels and passed a rigorous Pi-Rotation Consistency Test to ensure our basis-changes were physically accurate. As we scale to larger $N$, we will utilize FP32 precision to keep our state-vectors lean. If we hit memory limits, we will deploy the nvidia-mgpu backend to distribute the circuit workload across multiple GPUs, ensuring our "Quantum Seeder" stays fast and reliable.
 
 ### Classical Acceleration (MTS)
-* **Strategy:** [The classical search has many opportuntities for GPU acceleration. What will you chose to do?]
-    * *Example:* "The standard MTS evaluates neighbors one by one. We will use `cupy` to rewrite the energy function to evaluate a batch of 1,000 neighbor flips simultaneously on the GPU."
+Strategy: We identified that calculating energy for every bit-flip one-by-one was our primary bottleneck. To overcome this, Prem Santh is overseeing the vectorization of our autocorrelation math using CuPy. Instead of a slow serial approach, we are building a "parallel highway" to evaluate entire batches of sequence neighbors simultaneously on the GPU. This transforms our Memetic Tabu Search from a slow crawl into a high-speed refinement engine that can "polish" quantum seeds in milliseconds.
 
-### Hardware Targets
-* **Dev Environment:** [e.g., Qbraid (CPU) for logic, Brev L4 for initial GPU testing]
-* **Production Environment:** [e.g., Brev A100-80GB for final N=50 benchmarks]
+### Hardware TargetsDev Environment: Qbraid (CPU) was used to build our core logic, while the Brev L4 served as our proving ground to ensure our kernels were "hardware-ready" by passing all internal symmetry and rotation validation tests.Production Environment: For the final push to $N=40$ and beyond, we are targeting the Brev A100 (80GB) to leverage its massive memory bandwidth for deep Trotterized QAOA circuits and high-throughput classical refinement.
 
 ---
 
