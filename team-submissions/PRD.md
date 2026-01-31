@@ -17,10 +17,10 @@
 
 | Role | Name | GitHub Handle | Discord Handle
 | :--- | :--- | :--- | :--- |
-| **Project Lead** (Architect) | Krishnam | krishnamiiti29 | krishnam0474 |
+| **Project Lead** (Architect) | Krishnam Goyal| krishnamiiti29 | krishnam0474 |
 | **GPU Acceleration PIC** (Builder) | Ariel Montejo| amontejocys | amontejo |
 | **Quality Assurance PIC** (Verifier) | Prem Santh| premliorate| premliorated |
-| **Technical Marketing PIC** (Storyteller) | Charis | Charis-E-Shiny | charis0261|
+| **Technical Marketing PIC** (Storyteller) | Charis E Shiny | Charis-E-Shiny | charis0261|
 
 ---
 
@@ -50,7 +50,7 @@ Quantum Optimization Benchmark Library: The Intractable Decathlon (Kipu Quantum,
 ---
 
 ## 3. The Acceleration Strategy
-Owner: Prem Santh CK (GPU Acceleration Lead)
+Owner: Ariel Montejo (GPU Acceleration Lead)
 
 ### Quantum Acceleration (CUDA-Q)Strategy 
 * **Strategy:** We aren't just running code; we’re optimizing for the hardware. During our initial phase, we successfully debugged our custom QAOA kernels and passed a rigorous Pi-Rotation Consistency Test to ensure our basis-changes were physically accurate. As we scale to larger $N$, we will utilize FP32 precision to keep our state-vectors lean. If we hit memory limits, we will deploy the nvidia-mgpu backend to distribute the circuit workload across multiple GPUs, ensuring our "Quantum Seeder" stays fast and reliable.
@@ -78,7 +78,7 @@ Owner: Prem Santh CK (Quality Assurance Lead)
 ---
 
 ## 5. Execution Strategy & Success Metrics
-**Owner:** Technical Marketing PIC
+**Owner:** Charis E Shiny (Technical Marketing PIC)
 
 ### Agentic Workflow
 * **Plan:** AI acts as the conductor of the workflow, orchestrating both quantum and classical instruments. It automates the population generation, manages the mutation and tabu search cycles, and dynamically adjusts parameters based on convergence signals. Instead of manually tuning, AI continuously learns from prior runs, turning the workflow into a self‑optimizing loop.
@@ -100,8 +100,12 @@ Overlay convergence curves of classical tabu search vs. quantum‑seeded MTS, sh
 ---
 
 ## 6. Resource Management Plan
-**Owner:** GPU Acceleration PIC 
+**Owner:** Ariel Montejo (GPU Acceleration PIC)
 
-* **Plan:** [How will you avoid burning all your credits?]
-    * *Example:* "We will develop entirely on Qbraid (CPU) until the unit tests pass. We will then spin up a cheap L4 instance on Brev for porting. We will only spin up the expensive A100 instance for the final 2 hours of benchmarking."
-    * *Example:* "The GPU Acceleration PIC is responsible for manually shutting down the Brev instance whenever the team takes a meal break."
+* **Plan:** 
+    * **Strategy**: The guiding principle is CPU-first, cheap-gpu second and premium gpu-last.
+    * **CPU first validation**: All agorithmic development and debugging and unit testing will be performed on qBraid (CPU), validating the QAOA seeding logic, correctnes of labs energy and testing small N
+    * **Incremental gpu porting on low-cost hardware**: Once CPU implementation is stable, we will spin up a single NVIDIA L4 instance, porting and callibration. We will validate CUDA-Q GPU execution, callibrating shot counts and tuning CuPy batch counts for MTS energy evaluation. Majority of tests will run in this environment
+    * **Premium GPU usage only for final benchmarks**: This wil be used only all hyperparameters are fixed and only for short planned benchmar runs, with $N>40-50$. No debugging will occur in this phase.
+    * **Manual cost control and operational discipline**: Every instance will be shutt down after every experiment, ensuring no GPU remains idle, tracking the cumulative use, reserving the necesary amount for step 3.
+    * **Fail-fast excecution philosophy**: All GPU experiments are designed with small shots, short runtimes and clear success/failure criteria.
